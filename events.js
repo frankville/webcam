@@ -66,7 +66,7 @@ var reloadwts = function(wts){
 
     var imgFile = wts[i].captcheckin;
 
-    var img = "<img src='"+imgFile+"' width='50' height='50' >";
+    var img = "<img src='"+imgFile+"' width='100' height='100' class='snapshot' >";
     row = row +
 		"<td id='idwt'>"+wts[i].idwt+"</td>"+
 		"<td>"+img+"</td>"+
