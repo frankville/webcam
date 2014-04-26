@@ -3,20 +3,30 @@ $(document).ready(function() {
 
 $("#formulario").submit(function(event ){
 	event.preventDefault();
-	saveAPic();
+		
+		try {
+			if($("#campo").val() != ""){
+				var employee = parseInt($("#campo").val());
+				isACheckin(employee);
+				$("#campo").val("");				
+			}
+		}catch (error){
+			console.log("error en submit "+error);	
+		}
+	
 });
 
 }) ;
 
 
 
-  function saveAPic() {
+  function doCheckin(employee) {
     var canvas = $("#cuadro")[0];
     canvas.width = video.getAttribute("width");
     canvas.height = video.getAttribute("height");
     canvas.getContext('2d').drawImage(video, 0, 0, video.getAttribute("width"), video.getAttribute("height"));
     var data = canvas.toDataURL('image/png');
-    saveToDB(data);
+    performCheckin(data,employee);
   }
 
   function getWTItems(){	
@@ -30,6 +40,7 @@ wTime.openCursor().onsuccess = function(event) {
 
   	var wt = new WorkingTime();
   	wt.idwt = cursor.value.idwt;
+  	wt.employee = cursor.value.employee;
   	wt.captcheckin = cursor.value.captcheckin;
   	wt.checkin = cursor.value.checkin;
   	wt.captcheckout = cursor.value.captcheckout;
@@ -64,14 +75,19 @@ var reloadwts = function(wts){
 	for(var i=0;i < wts.length; i++){
 		var row = "<tr>";
 
-    var imgFile = wts[i].captcheckin;
-
-    var img = "<img src='"+imgFile+"' width='100' height='100' class='snapshot' >";
+    var imgCheckin = wts[i].captcheckin;
+	var imgCheckout = wts[i].captcheckout;
+    var imgChin = "<img src='"+imgCheckin+"' width='100' height='100' class='snapshot' >";
+    var imgChout = "";
+    if(wts[i].captcheckout != null){
+    	imgChout="<img src='"+imgCheckout+"' width='100' height='100' class='snapshot' >";
+    }
     row = row +
 		"<td id='idwt'>"+wts[i].idwt+"</td>"+
-		"<td>"+img+"</td>"+
+		"<td>"+wts[i].employee+"</td>"+
+		"<td>"+imgChin+"</td>"+
 		"<td>"+wts[i].checkin+"</td>"+
-		"<td>"+wts[i].captcheckout+"</td>"+
+		"<td>"+imgChout+"</td>"+
 		"<td>"+wts[i].checkout+"</td>"+
 		"<td>"+"<button>x</button></td>"+
 		"</tr>";
@@ -97,4 +113,15 @@ function deleteWT(wt){
 		getWTItems();
 	}
 };
+
+  function doCheckout(employee) {
+    var canvas = $("#cuadro")[0];
+    canvas.width = video.getAttribute("width");
+    canvas.height = video.getAttribute("height");
+    canvas.getContext('2d').drawImage(video, 0, 0, video.getAttribute("width"), video.getAttribute("height"));
+    var data = canvas.toDataURL('image/png');
+    performCheckout(data,employee);
+
+  }
+
 
