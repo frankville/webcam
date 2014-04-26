@@ -1,0 +1,9 @@
+div {
+	display: block;
+}
+
+#cuadro {
+	display: none;
+	visibility: hidden;	
+}
+
