@@ -10,7 +10,7 @@ var db ;
   var remoteCouch ;
 function createDatabase(){
    db = new PouchDB("workingtime",{cache : false});
-    remoteCouch = 'http://localhost:5984/workingtime';
+    remoteCouch = 'http://li707-122.members.linode.com:5984/workingtime';
 
   db.info(function(err,info){
     db.changes({
