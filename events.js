@@ -1,4 +1,5 @@
 $(document).ready(function() {
+showInfoMsg("Todo Listo! ingresa tu id ");
 	createDatabase();
 
 $("#formulario").submit(function(event ){
@@ -16,7 +17,7 @@ $("#formulario").submit(function(event ){
 	
 });
 
-showInfoMsg("Todo Listo! ingresa tu id ");
+
 
 }) ;
 
@@ -32,43 +33,12 @@ showInfoMsg("Todo Listo! ingresa tu id ");
   }
 
   function getWTItems(){	
-  	console.log("entra aca");
-  	var array = new Array();
-  	db.allDocs({
-      include_docs: true, descending:true}, function (err,doc){
-        
-        reloadwts(doc.rows);
+  	console.log("entra a getWTItems");
+  	sync();
+	db.allDocs({
+    	include_docs: true, descending:true}, function (err,doc){
+       	reloadwts(doc.rows);
     });
- /* 
-  			var array = new Array();
-	var wTime = database.transaction("workingtime").objectStore("workingtime");
-
-wTime.openCursor().onsuccess = function(event) {
-  var cursor = event.target.result;
-  if (cursor) {
-
-  	var wt = new WorkingTime();
-  	wt.idwt = cursor.value.idwt;
-  	wt.employee = cursor.value.employee;
-  	wt.captcheckin = cursor.value.captcheckin;
-  	wt.checkin = cursor.value.checkin;
-  	wt.captcheckout = cursor.value.captcheckout;
-  	wt.checkout = cursor.value.checkout; 
-
-  	array.push(wt);
-
-    cursor.continue();
-  }
-  else {
-     reloadwts(array);
-  }
-};
-
-wTime.openCursor().onerror = function (event){
-	alert("error en getusuarios!!");
-}
-
-*/
 
 };
 
@@ -223,7 +193,7 @@ function showSuccessMsg(msg){
 
 function showInfoMsg(msg){
 	console.log("entra aca");
-			$("#info").val(msg);
+			$("#info").text(msg);
 		$("#info").removeClass("alert-success");
 		$("#info").removeClass("alert-danger");
 		$("#info").addClass("alert-info");

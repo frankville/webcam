@@ -10,16 +10,14 @@ var db ;
   var remoteCouch ;
 function createDatabase(){
    db = new PouchDB("workingtime",{cache : false});
-    remoteCouch = 'http://192.168.1.200:5984/workingtime';
+    remoteCouch = 'http://localhost:5984/workingtime';
 
   db.info(function(err,info){
     db.changes({
       since: info.update_seq,
       live: true
-    }).on("change",getWTItems());
-    if (remoteCouch) {
-    sync();
-  } 
+    }).on("change", getWTItems());
+
   });
    
 }
@@ -86,9 +84,11 @@ function WorkingTime(){
   // Initialise a sync with the remote server
   function sync() {
    showInfoMsg("syncing");
+   console.log("entra a sync");
     var opts = {live: true};
     db.replicate.to(remoteCouch,opts,showErrMsg);
-    db.replicate.from(remoteCouch,opts,showErrMsg);
+    db.replicate.from(remoteCouch,opts,showErrMsg).on("complete", getWTItems);
+
   }
 
 
